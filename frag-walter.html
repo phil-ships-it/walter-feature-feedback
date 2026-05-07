@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frag Walter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<style>
+  :root {
+    --bg:           #f3ede1;
+    --ink:          #1a1612;
+    --ink-muted:    rgba(26,22,18,0.55);
+    --ink-faint:    rgba(26,22,18,0.35);
+    --border:       rgba(26,22,18,0.15);
+    --accent:       #b8442a;
+    --dark:         #1a1612;
+    --dark-mid:     #232018;
+    --v-trash:      #e8a594;
+    --v-meh:        #e6c068;
+    --v-ship:       #9bc28a;
+    --serif:        'Newsreader', 'Times New Roman', serif;
+    --sans:         'Inter', sans-serif;
+    --mono:         'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.65;
+    min-height: 100vh;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 48px;
+    border-bottom: 1px solid rgba(26,22,18,0.1);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .topbar-left {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  .topbar-brand { font-weight: 600; color: var(--ink); }
+  .topbar-tier  { color: rgba(26,22,18,0.38); }
+  .topbar-right {
+    display: flex;
+    gap: 24px;
+    color: rgba(26,22,18,0.42);
+  }
+  .topbar-right .topbar-cta { color: var(--accent); }
+
+  /* ── HERO ── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 48px;
+    min-height: 480px;
+    align-items: stretch;
+  }
+  .hero-left {
+    padding: 64px 40px 52px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 22px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .hero-eyebrow-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: 78px;
+    line-height: 0.97;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub {
+    margin-top: 26px;
+    font-size: 17px;
+    line-height: 1.5;
+    color: rgba(26,22,18,0.62);
+    font-weight: 300;
+    max-width: 400px;
+  }
+  .hero-steps {
+    display: flex;
+    gap: 28px;
+    margin-top: 44px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(26,22,18,0.38);
+  }
+  .hero-steps .step-num { color: var(--accent); }
+
+  /* portrait */
+  .hero-right {
+    padding: 28px 0 28px 24px;
+    display: flex;
+    align-items: stretch;
+  }
+  .hero-portrait-wrap {
+    flex: 1;
+    background: #2a2520;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 30px 60px -20px rgba(40,30,20,0.35);
+    aspect-ratio: 0.88;
+    min-height: 380px;
+  }
+  .hero-portrait-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 18%;
+    filter: saturate(0.85) contrast(1.05);
+    display: block;
+  }
+  .hero-nameplate {
+    position: absolute;
+    top: 18px; left: 18px;
+    background: rgba(20,15,10,0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 10px 14px;
+    border-left: 2px solid var(--accent);
+    color: #f3ede1;
+  }
+  .hero-nameplate-sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(243,237,225,0.48);
+  }
+  .hero-nameplate-name {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-style: italic;
+    margin-top: 2px;
+  }
+  .hero-bio {
+    position: absolute;
+    bottom: 0; left: 0; right: 42%;
+    padding: 48px 20px 16px;
+    background: linear-gradient(to top right, rgba(20,15,10,0.97) 50%, rgba(20,15,10,0) 100%);
+    color: #f3ede1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px 14px;
+  }
+  .hero-bio-item { display: flex; flex-direction: column; }
+  .hero-bio-key {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(243,237,225,0.38);
+  }
+  .hero-bio-val {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: rgba(243,237,225,0.88);
+    font-weight: 400;
+    margin-top: 1px;
+  }
+
+  /* ── SEPARATOR ── */
+  .sep-wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+  .sep-line {
+    position: relative;
+    height: 1px;
+    background: rgba(26,22,18,0.12);
+  }
+  .sep-dot {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* ── FORM ── */
+  .form-wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 52px 24px 40px;
+  }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+  .field { margin-bottom: 28px; }
+  .field > label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+  }
+  #url {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid rgba(26,22,18,0.32);
+    font-family: var(--mono);
+    font-size: 17px;
+    color: var(--ink);
+    padding: 9px 0;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  #url:focus   { border-bottom-color: var(--accent); }
+  #url::placeholder { color: rgba(26,22,18,0.28); font-size: 15px; }
+  #feature {
+    width: 100%;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(26,22,18,0.13);
+    border-radius: 2px;
+    padding: 14px 16px;
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.55;
+    color: rgba(26,22,18,0.85);
+    min-height: 118px;
+    resize: vertical;
+    outline: none;
+    font-style: italic;
+    transition: border-color 0.15s;
+  }
+  #feature:focus { border-color: rgba(26,22,18,0.3); }
+  #feature::placeholder { color: rgba(26,22,18,0.28); font-style: italic; }
+
+  .btn {
+    background: var(--ink);
+    color: #f3ede1;
+    border: none;
+    padding: 14px 28px;
+    font-size: 15px;
+    font-family: var(--sans);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: opacity 0.15s;
+  }
+  .btn:hover    { opacity: 0.8; }
+  .btn:disabled { opacity: 0.36; cursor: not-allowed; }
+  .hint {
+    display: inline-block;
+    margin-left: 12px;
+    font-size: 11px;
+    color: rgba(26,22,18,0.36);
+    font-family: var(--mono);
+  }
+  .form-trust {
+    margin-top: 44px;
+    padding-top: 22px;
+    border-top: 1px dashed rgba(26,22,18,0.18);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(26,22,18,0.46);
+    line-height: 1.75;
+  }
+  .form-trust strong { color: var(--ink); }
+
+  .form-reset { display: none; padding-bottom: 8px; }
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid rgba(26,22,18,0.2);
+    border-radius: 2px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-family: var(--sans);
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .btn-ghost:hover { border-color: var(--accent); }
+
+  /* ── RESPONSE SCREEN ── */
+  .response-screen       { display: none; }
+  .response-screen.visible { display: block; }
+
+  .rs-card {
+    background: var(--dark);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px -15px rgba(40,30,20,0.35);
+  }
+
+  /* loading */
+  .rs-loading {
+    padding: 48px 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: rgba(255,255,255,0.38);
+    font-size: 14px;
+    font-family: var(--mono);
+  }
+  .spinner {
+    font-size: 24px;
+    animation: spin 1.4s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* result */
+  .rs-header {
+    position: relative;
+    padding: 28px 32px 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .rs-watermark {
+    position: absolute;
+    top: 20px; right: 28px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: rgba(243,237,225,0.52);
+  }
+  .rs-photo {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1.5px solid rgba(243,237,225,0.18);
+  }
+  .rs-photo img {
+    display: block;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .rs-name {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 500;
+    color: #f3ede1;
+  }
+  .rs-role {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(243,237,225,0.42);
+    margin-top: 2px;
+  }
+
+  .rs-quote {
+    padding: 24px 32px 20px;
+    font-family: var(--serif);
+    font-size: 19px;
+    font-style: italic;
+    line-height: 1.62;
+    color: rgba(243,237,225,0.9);
+  }
+
+  .rs-verdict-zone { padding: 0 32px; }
+  .rs-rule { border: none; border-top: 1px solid rgba(243,237,225,0.1); }
+
+  .rs-verdict-row {
+    padding: 18px 0;
+  }
+  .rs-verdict-caption {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(243,237,225,0.32);
+    margin-bottom: 6px;
+  }
+  .rs-verdict {
+    font-family: var(--serif);
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 1;
+    color: #fff;
+  }
+  .rs-verdict-sub {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: rgba(243,237,225,0.48);
+    margin-top: 5px;
+  }
+
+  .rs-echo {
+    margin: 0 32px 24px;
+    padding: 14px 16px;
+    background: var(--dark-mid);
+    border-radius: 3px;
+  }
+  .rs-echo-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.22);
+    margin-bottom: 7px;
+  }
+  .rs-echo-feature {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.55;
+    margin-bottom: 5px;
+  }
+  .rs-echo-url {
+    font-size: 11px;
+    color: rgba(255,255,255,0.22);
+    font-family: var(--mono);
+  }
+
+  /* share buttons */
+  .rs-share-outer {
+    display: none;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 14px 24px 0;
+    text-align: center;
+  }
+  .rs-btn-light {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid rgba(26,22,18,0.2);
+    border-radius: 2px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-family: var(--sans);
+    color: rgba(26,22,18,0.6);
+    cursor: pointer;
+    margin-right: 8px;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .rs-btn-light:hover    { border-color: var(--accent); color: var(--ink); }
+  .rs-btn-light:disabled { opacity: 0.35; cursor: not-allowed; }
+  .rs-btn-light.success  { color: #3a7d3a; border-color: #3a7d3a; }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 80px;
+    padding: 16px 48px;
+    border-top: 1px solid rgba(26,22,18,0.1);
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(26,22,18,0.32);
+  }
+
+  .page-bottom { padding-bottom: 24px; }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<nav class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-brand">FRAG · WALTER</span>
+    <span class="topbar-tier">Free Tier · v0.1</span>
+  </div>
+  <div class="topbar-right">
+    <span>Wie es funktioniert</span>
+    <span>Beispiele</span>
+    <span class="topbar-cta">Paid bald →</span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-left">
+    <div>
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-dot"></div>
+        Ehrliches Feature-Feedback
+      </div>
+      <h1>Dein <em>Feature.</em><br>Walters Urteil.</h1>
+      <p class="hero-sub">Bevor du Engineering-Wochen verbrennst — hol dir Feedback von jemandem, der schon drei ERP-Migrationen überlebt hat.</p>
+    </div>
+    <div class="hero-steps">
+      <div><span class="step-num">01</span>&nbsp; URL rein</div>
+      <div><span class="step-num">02</span>&nbsp; Feature rein</div>
+      <div><span class="step-num">03</span>&nbsp; Walter raus</div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-portrait-wrap">
+      <img src="Walter_plain.png" alt="Walter Müller">
+      <div class="hero-nameplate">
+        <div class="hero-nameplate-sub">Walter Müller</div>
+        <div class="hero-nameplate-name">51 · Leiter IT</div>
+      </div>
+      <div class="hero-bio">
+        <div class="hero-bio-item">
+          <span class="hero-bio-key">Firma</span>
+          <span class="hero-bio-val">Seit 23 Jahren</span>
+        </div>
+        <div class="hero-bio-item">
+          <span class="hero-bio-key">Erlebt</span>
+          <span class="hero-bio-val">3 ERP-Migrationen</span>
+        </div>
+        <div class="hero-bio-item">
+          <span class="hero-bio-key">Trinkt</span>
+          <span class="hero-bio-val">Filterkaffee</span>
+        </div>
+        <div class="hero-bio-item">
+          <span class="hero-bio-key">Mag nicht</span>
+          <span class="hero-bio-val">Meetings vor 9</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Separator -->
+<div class="sep-wrap">
+  <div class="sep-line">
+    <div class="sep-dot"></div>
+  </div>
+</div>
+
+<!-- Form -->
+<div class="form-wrap">
+  <div id="formFields">
+    <div class="section-label">I. Eingabe</div>
+    <div class="field">
+      <label for="url">Produkt-URL</label>
+      <input type="url" id="url" placeholder="https://www.personio.de/">
+    </div>
+    <div class="field">
+      <label for="feature">Feature-Request</label>
+      <textarea id="feature" placeholder="Beschreib das Feature. Kurz reicht. Walter hört trotzdem nicht zu."></textarea>
+    </div>
+    <button class="btn" id="btn" onclick="askWalter()">Walter fragen →</button>
+    <span class="hint">⌘ + Enter</span>
+    <div class="form-trust">
+      <strong>Kein Login.</strong> Kein Tracking-Theater. Verdict ist sofort teilbar — als Bild oder Permalink. Walter ist ehrlich. Walter ist unbequem. Aber Walter spart dir drei Sprints.
+    </div>
+  </div>
+  <div class="form-reset" id="formReset">
+    <button class="btn-ghost" onclick="resetForm()">← Weiteren Feature-Request stellen</button>
+  </div>
+</div>
+
+<!-- Response screen -->
+<div class="response-screen" id="responseScreen">
+  <div class="form-wrap" style="padding-top:0; padding-bottom:0;">
+    <div class="rs-card">
+      <div class="rs-loading" id="rsLoading">
+        <span class="spinner">☕</span>
+        <span>Walter denkt nach</span>
+      </div>
+
+      <div id="rsResult" style="display:none">
+        <div class="rs-header">
+          <div class="rs-watermark">fragwalter.de</div>
+          <div class="rs-photo">
+            <img id="rsPhoto" src="Walter_plain.png" alt="Walter Müller">
+          </div>
+          <div>
+            <div class="rs-name">Walter Müller</div>
+            <div class="rs-role">IT-Leiter · 23 Jahre · Filterkaffee</div>
+          </div>
+        </div>
+
+        <div class="rs-quote" id="rsQuote"></div>
+
+        <div class="rs-verdict-zone" id="rsVerdictZone">
+          <div class="rs-rule"></div>
+          <div class="rs-verdict-row">
+            <div class="rs-verdict-caption">Verdict</div>
+            <div class="rs-verdict" id="rsVerdict"></div>
+            <div class="rs-verdict-sub" id="rsVerdictSub"></div>
+          </div>
+          <div class="rs-rule"></div>
+        </div>
+
+        <div class="rs-echo">
+          <div class="rs-echo-label">Feature-Request</div>
+          <div class="rs-echo-feature" id="rsEchoFeature"></div>
+          <div class="rs-echo-url" id="rsEchoUrl"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="rsShareOuter" class="rs-share-outer">
+  <button class="rs-btn-light" id="btnCopy" onclick="copyImage()">Als Bild kopieren</button>
+  <button class="rs-btn-light" id="btnShare" onclick="shareImage()">Link kopieren</button>
+</div>
+
+<div class="page-bottom"></div>
+
+<!-- Off-screen share card: Header → Feature → Quote → Verdict -->
+<div id="shareCard" style="position:fixed;left:-9999px;top:0;width:680px;background:#1a1612;font-family:'Inter',sans-serif;border-radius:4px;">
+  <div style="position:relative;padding:28px 32px 0;display:flex;align-items:center;gap:14px;">
+    <div style="position:absolute;top:20px;right:28px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.18em;color:rgba(243,237,225,0.72);">fragwalter.de</div>
+    <div class="rs-photo"><img id="scPhoto" src="" alt="Walter Müller"></div>
+    <div>
+      <div class="rs-name">Walter Müller</div>
+      <div class="rs-role">IT-Leiter · 23 Jahre · Filterkaffee</div>
+    </div>
+  </div>
+  <div class="rs-echo" style="margin:20px 32px 0;">
+    <div class="rs-echo-label">Feature-Request</div>
+    <div class="rs-echo-feature" id="scFeature"></div>
+    <div class="rs-echo-url" id="scUrl"></div>
+  </div>
+  <div class="rs-quote" id="scQuote"></div>
+  <div class="rs-verdict-zone" id="scVerdictZone">
+    <div class="rs-rule"></div>
+    <div class="rs-verdict-row">
+      <div class="rs-verdict-caption">Verdict</div>
+      <div class="rs-verdict" id="scVerdict"></div>
+      <div class="rs-verdict-sub" id="scVerdictSub"></div>
+    </div>
+    <div class="rs-rule"></div>
+  </div>
+  <div style="height:28px"></div>
+</div>
+
+<footer>
+  <span>© 2026 fragwalter.de</span>
+  <span>made by humans · powered by walter</span>
+</footer>
+
+<script>
+let walterDataUrl = null;
+fetch('/Walter_plain.png').then(r => r.blob()).then(blob => {
+  const reader = new FileReader();
+  reader.onload = () => { walterDataUrl = reader.result; };
+  reader.readAsDataURL(blob);
+});
+
+const VERDICT_EMOJIS = ['✅', '🤷', '🗑️'];
+const VERDICT_COLORS = { ship: '#9bc28a', meh: '#e6c068', trash: '#e8a594' };
+const VERDICT_SUBS   = {
+  ship:  'Klarer ROI. Selten.',
+  meh:   'Aber hinten an die Queue.',
+  trash: 'Falsches Problem.',
+};
+
+function parseResponse(text) {
+  const lines = text.trim().split('\n');
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const line = lines[i].trim();
+    if (!line) continue;
+    let verdictKey = null;
+    if (line.startsWith('✅'))         verdictKey = 'ship';
+    else if (line.startsWith('🤷')) verdictKey = 'meh';
+    else if (line.startsWith('🗑')) verdictKey = 'trash';
+    if (verdictKey) {
+      return { body: lines.slice(0, i).join('\n').trim(), verdict: line, verdictKey };
+    }
+  }
+  return { body: text.trim(), verdict: '', verdictKey: 'meh' };
+}
+
+function populateResult(text, feature, productUrl) {
+  const { body, verdict, verdictKey } = parseResponse(text);
+  const quote = '„' + body + '”';
+  const color  = VERDICT_COLORS[verdictKey] || '#fff';
+  const sub    = VERDICT_SUBS[verdictKey]   || '';
+
+  document.getElementById('rsQuote').textContent        = quote;
+  document.getElementById('rsEchoFeature').textContent  = feature;
+  document.getElementById('rsEchoUrl').textContent      = productUrl;
+  const rsV = document.getElementById('rsVerdict');
+  rsV.textContent = verdict;
+  rsV.style.color = color;
+  document.getElementById('rsVerdictSub').textContent   = sub;
+  document.getElementById('rsVerdictZone').style.display = verdict ? 'block' : 'none';
+  if (walterDataUrl) document.getElementById('rsPhoto').src = walterDataUrl;
+
+  const img = walterDataUrl || '/Walter_plain.png';
+  document.getElementById('scPhoto').src                = img;
+  document.getElementById('scFeature').textContent      = feature;
+  document.getElementById('scUrl').textContent          = productUrl;
+  document.getElementById('scQuote').textContent        = quote;
+  const scV = document.getElementById('scVerdict');
+  scV.textContent = verdict;
+  scV.style.color = color;
+  document.getElementById('scVerdictSub').textContent   = sub;
+  document.getElementById('scVerdictZone').style.display = verdict ? 'block' : 'none';
+}
+
+async function renderCard() {
+  return html2canvas(document.getElementById('shareCard'), {
+    scale: 2, useCORS: true, backgroundColor: '#1a1612',
+  });
+}
+
+function showShareButtons() { document.getElementById('rsShareOuter').style.display = 'block'; }
+function hideShareButtons() { document.getElementById('rsShareOuter').style.display = 'none'; }
+
+async function copyImage() {
+  const btn = document.getElementById('btnCopy');
+  btn.disabled = true;
+  try {
+    const canvas = await renderCard();
+    canvas.toBlob(async blob => {
+      try {
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+        btn.textContent = '✓ Kopiert!';
+        btn.classList.add('success');
+        setTimeout(() => { btn.textContent = 'Als Bild kopieren'; btn.classList.remove('success'); btn.disabled = false; }, 2000);
+      } catch(e) { btn.disabled = false; alert('Kopieren fehlgeschlagen: ' + e.message); }
+    }, 'image/png');
+  } catch(e) { btn.disabled = false; alert('Render-Fehler: ' + e.message); }
+}
+
+async function shareImage() {
+  const btn = document.getElementById('btnShare');
+  btn.disabled = true;
+  try {
+    const canvas = await renderCard();
+    const base64 = canvas.toDataURL('image/png').split(',')[1];
+    const res = await fetch('/api/share', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        image:      base64,
+        productUrl: document.getElementById('url').value.trim(),
+        feature:    document.getElementById('feature').value.trim(),
+        response:   document.getElementById('rsQuote').textContent,
+      })
+    });
+    const data = await res.json();
+    await navigator.clipboard.writeText(data.url);
+    btn.textContent = '✓ Link kopiert!';
+    btn.classList.add('success');
+    setTimeout(() => { btn.textContent = 'Link kopieren'; btn.classList.remove('success'); btn.disabled = false; }, 2500);
+  } catch(e) { btn.disabled = false; alert('Fehler: ' + e.message); }
+}
+
+async function askWalter() {
+  const url     = document.getElementById('url').value.trim();
+  const feature = document.getElementById('feature').value.trim();
+  const btn     = document.getElementById('btn');
+  if (!url)     { document.getElementById('url').focus();     return; }
+  if (!feature) { document.getElementById('feature').focus(); return; }
+
+  document.getElementById('formFields').style.display = 'none';
+  document.getElementById('formReset').style.display  = 'block';
+  btn.disabled = true;
+  document.getElementById('rsLoading').style.display  = 'flex';
+  document.getElementById('rsResult').style.display   = 'none';
+  document.getElementById('responseScreen').classList.add('visible');
+  document.getElementById('responseScreen').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  try {
+    const response = await fetch('/api/walter', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productUrl: url, feature })
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      document.getElementById('rsLoading').style.display = 'none';
+      document.getElementById('rsResult').style.display  = 'block';
+      document.getElementById('rsQuote').textContent = `Fehler ${response.status}: ${data.error?.message ?? JSON.stringify(data)}`;
+      document.getElementById('rsVerdictZone').style.display = 'none';
+      return;
+    }
+    populateResult(data.text, feature, url);
+    document.getElementById('rsLoading').style.display = 'none';
+    document.getElementById('rsResult').style.display  = 'block';
+    showShareButtons();
+  } catch(e) {
+    document.getElementById('rsLoading').style.display = 'none';
+    document.getElementById('rsResult').style.display  = 'block';
+    document.getElementById('rsQuote').textContent = `Netzwerkfehler: ${e.message}`;
+    document.getElementById('rsVerdictZone').style.display = 'none';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function resetForm() {
+  document.getElementById('formFields').style.display = 'block';
+  document.getElementById('formReset').style.display  = 'none';
+  document.getElementById('responseScreen').classList.remove('visible');
+  hideShareButtons();
+  document.getElementById('feature').value = '';
+  document.getElementById('feature').focus();
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') askWalter();
+});
+</script>
+
+</body>
+</html>

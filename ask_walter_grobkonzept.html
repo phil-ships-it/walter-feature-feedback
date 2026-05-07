@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grobkonzept — Ask Walter (Frag Walter)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f3ee;
+    --ink: #1a1a18;
+    --ink-muted: #5a5a56;
+    --accent: #c8401a;
+    --accent-light: #f4e8e3;
+    --border: #d8d5ce;
+    --card-bg: #ffffff;
+    --cover-bg: #111110;
+    --mono: 'DM Mono', monospace;
+    --serif: 'DM Serif Display', serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* COVER */
+  .cover {
+    background: var(--cover-bg);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 80px 60px;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -120px; left: -120px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(200,64,26,0.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cover-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+  .cover h1 {
+    font-family: var(--serif);
+    font-size: 64px;
+    line-height: 1.1;
+    color: #fff;
+    max-width: 700px;
+    margin-bottom: 8px;
+  }
+  .cover-sub {
+    font-size: 20px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 56px;
+    font-weight: 300;
+  }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 32px;
+    max-width: 700px;
+  }
+  .meta-item label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 4px;
+  }
+  .meta-item span {
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* TOC */
+  .toc-section {
+    padding: 72px 0 56px;
+    border-bottom: 1px solid var(--border);
+  }
+  .toc-section h2 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+  }
+  .toc-list { list-style: none; }
+  .toc-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .toc-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    min-width: 28px;
+  }
+  .toc-list a {
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  .toc-list a:hover { color: var(--accent); }
+
+  /* SECTIONS */
+  .section {
+    padding: 72px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .section h2 {
+    font-family: var(--serif);
+    font-size: 32px;
+    color: var(--ink);
+  }
+  .section h3 {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin: 36px 0 14px;
+  }
+  p { margin-bottom: 14px; color: var(--ink-muted); }
+  p strong { color: var(--ink); }
+
+  /* CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+  }
+  .card-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .card p { font-size: 13px; margin: 0; }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--accent-light);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 20px;
+    margin: 24px 0;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .callout strong { color: var(--accent); }
+
+  .callout-neutral {
+    background: #f0f0ed;
+    border-left: 3px solid var(--border);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 20px;
+    margin: 24px 0;
+    font-size: 14px;
+    color: var(--ink-muted);
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13px;
+  }
+  th {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--border);
+    background: #f9f8f5;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--ink-muted);
+    vertical-align: top;
+  }
+  td strong { color: var(--ink); }
+
+  /* FLOW STEPS */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 24px 0;
+  }
+  .flow-step {
+    display: flex;
+    gap: 20px;
+    position: relative;
+  }
+  .flow-step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    bottom: -1px;
+    width: 2px;
+    background: var(--border);
+  }
+  .flow-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 4px;
+    position: relative;
+    z-index: 1;
+  }
+  .flow-content {
+    padding: 4px 0 36px;
+  }
+  .flow-content h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .flow-content p { font-size: 13px; margin: 0; }
+
+  /* BADGE */
+  .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+  .badge-free { background: #e8f5e9; color: #2e7d32; }
+  .badge-paid { background: #e3f0f8; color: #1565c0; }
+  .badge-later { background: #f0f0ed; color: #666; }
+  .badge-open { background: var(--accent-light); color: var(--accent); }
+
+  /* TIER TABLE */
+  .tier-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .tier-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .tier-header {
+    padding: 16px 20px;
+    font-weight: 600;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tier-header.free { background: #f0f8f0; color: #2e7d32; }
+  .tier-header.paid { background: #e8f0fb; color: #1565c0; }
+  .tier-body { padding: 16px 20px; background: var(--card-bg); }
+  .tier-body ul { list-style: none; }
+  .tier-body li {
+    font-size: 13px;
+    color: var(--ink-muted);
+    padding: 5px 0;
+    border-bottom: 1px dashed var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .tier-body li::before { content: '—'; color: var(--accent); flex-shrink: 0; }
+
+  /* WALTER QUOTE */
+  .walter-quote {
+    background: var(--cover-bg);
+    color: rgba(255,255,255,0.85);
+    border-radius: 8px;
+    padding: 28px 32px;
+    margin: 24px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .walter-quote::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(200,64,26,0.2) 0%, transparent 70%);
+  }
+  .walter-persona {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .walter-quote blockquote {
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 12px;
+  }
+  .walter-verdict {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* PHASE ROADMAP */
+  .phases {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .phase {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .phase-header {
+    padding: 12px 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .phase-header.p1 { background: #fce8e3; color: var(--accent); }
+  .phase-header.p2 { background: #e8f0fb; color: #1565c0; }
+  .phase-header.p3 { background: #f0f0ed; color: #666; }
+  .phase-body { padding: 14px 16px; background: var(--card-bg); }
+  .phase-body ul { list-style: none; }
+  .phase-body li {
+    font-size: 12px;
+    color: var(--ink-muted);
+    padding: 4px 0;
+    border-bottom: 1px dashed var(--border);
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  .phase-body li::before { content: '·'; color: var(--accent); flex-shrink: 0; }
+
+  /* OPEN QUESTIONS */
+  .open-list { list-style: none; }
+  .open-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 14px;
+  }
+  .open-list li::before {
+    content: '?';
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: var(--accent-light);
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* MOCKUP */
+  .mockup-wrapper {
+    margin: 32px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    border: 1px solid #ccc;
+  }
+  .browser-chrome {
+    background: #2d2d2d;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .traffic-dots { display: flex; gap: 6px; }
+  .dot {
+    width: 11px; height: 11px; border-radius: 50%;
+  }
+  .dot-r { background: #ff5f56; }
+  .dot-y { background: #ffbd2e; }
+  .dot-g { background: #27c93f; }
+  .address-bar {
+    flex: 1;
+    background: #444;
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* FREE TIER MOCKUP */
+  .mockup-free {
+    background: #f8f7f4;
+    padding: 0;
+  }
+  .mock-hero {
+    background: #111110;
+    padding: 40px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .mock-hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%;
+    transform: translateX(-50%);
+    width: 400px; height: 300px;
+    background: radial-gradient(circle, rgba(200,64,26,0.3) 0%, transparent 65%);
+  }
+  .mock-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    position: relative;
+  }
+  .mock-logo span { color: var(--accent); }
+  .mock-tagline {
+    font-family: var(--serif);
+    font-size: 28px;
+    color: #fff;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .mock-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 32px;
+    position: relative;
+  }
+
+  .persona-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    padding: 24px 48px;
+    background: #f8f7f4;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .persona-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border: 2px solid var(--border);
+    border-radius: 100px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .persona-chip.active {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  .persona-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    background: #e8e4dc;
+  }
+  .persona-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .persona-role { font-size: 11px; color: var(--ink-muted); }
+
+  .mock-input-area {
+    padding: 28px 48px;
+    background: #f8f7f4;
+  }
+  .mock-url-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .mock-url-input {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-family: var(--mono);
+    background: #fff;
+    color: var(--ink-muted);
+  }
+  .mock-feature-input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: var(--sans);
+    background: #fff;
+    color: var(--ink-muted);
+    height: 90px;
+    resize: none;
+    margin-bottom: 14px;
+    display: block;
+  }
+  .mock-btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 11px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--sans);
+    cursor: pointer;
+  }
+
+  .mock-result-area {
+    border-top: 1px solid var(--border);
+    padding: 28px 48px;
+    background: #fff;
+    display: none;
+  }
+  .mock-result-area.visible { display: block; }
+  .result-persona-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .result-avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    font-size: 24px;
+    background: #e8e4dc;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .result-meta h4 { font-size: 15px; font-weight: 600; color: var(--ink); }
+  .result-meta p { font-size: 12px; color: var(--ink-muted); margin: 0; }
+  .result-text {
+    font-size: 15px;
+    color: var(--ink-muted);
+    line-height: 1.7;
+    font-style: italic;
+    background: #f8f7f4;
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    border-left: 3px solid var(--accent);
+  }
+  .result-verdict {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .share-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    background: #fff;
+    color: var(--ink-muted);
+  }
+
+  /* PAID MOCKUP */
+  .mockup-paid {
+    background: #f8f7f4;
+  }
+  .paid-layout {
+    display: flex;
+    min-height: 380px;
+  }
+  .paid-sidebar {
+    width: 220px;
+    background: var(--cover-bg);
+    padding: 20px 0;
+    flex-shrink: 0;
+  }
+  .paid-sidebar-logo {
+    padding: 0 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+  }
+  .paid-sidebar-logo span { color: var(--accent); }
+  .sidebar-section {
+    padding: 4px 0 12px;
+  }
+  .sidebar-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    padding: 4px 20px;
+    margin-bottom: 4px;
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+  }
+  .sidebar-item.active {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.9);
+  }
+  .sidebar-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+  }
+  .paid-main {
+    flex: 1;
+    padding: 24px 28px;
+    overflow: hidden;
+  }
+  .paid-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .paid-toolbar h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .persona-grid-paid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .persona-card-paid {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    background: var(--card-bg);
+    cursor: pointer;
+    text-align: center;
+  }
+  .persona-card-paid.active {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  .persona-card-paid .avatar { font-size: 22px; margin-bottom: 6px; }
+  .persona-card-paid h5 { font-size: 12px; font-weight: 600; color: var(--ink); }
+  .persona-card-paid p { font-size: 10px; color: var(--ink-muted); margin: 0; }
+  .ratings-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    background: #f8f7f4;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 10px;
+  }
+  .rating-item { text-align: center; }
+  .rating-item .stars { color: var(--accent); font-size: 13px; letter-spacing: 2px; }
+  .rating-item .rating-label { font-size: 10px; font-family: var(--mono); color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  @media print {
+    .cover { min-height: auto; padding: 60px; page-break-after: always; }
+    .section { page-break-inside: avoid; }
+    .mockup-wrapper { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-label">Grobkonzept · Ask Walter</div>
+  <h1>Frag Walter.</h1>
+  <div class="cover-sub">Feature-Validierung für B2B SaaS Product Teams — bevor die Entwicklung anfängt.</div>
+  <div class="meta-grid">
+    <div class="meta-item"><label>Status</label><span>Draft v0.3</span></div>
+    <div class="meta-item"><label>Erstellt</label><span>Mai 2026</span></div>
+    <div class="meta-item"><label>Scope</label><span>MVP Free + Paid</span></div>
+    <div class="meta-item"><label>Autor</label><span>Ulf</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TOC -->
+  <div class="toc-section">
+    <h2>Inhalt</h2>
+    <ul class="toc-list">
+      <li><span class="toc-num">01</span><a href="#s1">Ziel &amp; Scope</a></li>
+      <li><span class="toc-num">02</span><a href="#s2">Zielgruppe</a></li>
+      <li><span class="toc-num">03</span><a href="#s3">Produkt-Tier-Modell</a></li>
+      <li><span class="toc-num">04</span><a href="#s4">Free Tier — Viraler Lead-Funnel</a></li>
+      <li><span class="toc-num">05</span><a href="#s5">Paid Tier — Echte Produktanalyse</a></li>
+      <li><span class="toc-num">06</span><a href="#s6">Walter als Figur</a></li>
+      <li><span class="toc-num">07</span><a href="#s7">Sharing &amp; Viralität</a></li>
+      <li><span class="toc-num">08</span><a href="#s8">Technischer Ansatz</a></li>
+      <li><span class="toc-num">09</span><a href="#s9">Pricing-Überlegungen</a></li>
+      <li><span class="toc-num">10</span><a href="#s10">Offene Entscheidungen</a></li>
+      <li><span class="toc-num">11</span><a href="#s11">Umsetzungsschritte</a></li>
+    </ul>
+  </div>
+
+  <!-- 01 Ziel & Scope -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Ziel &amp; Scope</h2>
+    </div>
+    <p><strong>Ask Walter</strong> gibt B2B SaaS Product Teams eine ehrliche Marktperspektive — bevor sie Entwicklungskapazität in das falsche Feature investieren. Das Produkt unterbricht den klassischen Kreislauf: lauter Kunde hat Idee → Backlog wächst → drei Monate später nutzt genau einer das Feature.</p>
+    <p><strong>Job-to-be-done:</strong> <em>„Hilf mir herauszufinden ob ich das wirklich bauen soll — ohne dafür fünf Kunden anrufen zu müssen."</em></p>
+
+    <h3>In Scope — MVP</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-label">Free Layer</div>
+        <h4>Viraler Lead-Funnel</h4>
+        <p>URL-Eingabe + Feature-Eingabe → Walters Urteil. Kein Login. Shareable. Walter ist die einzige und klare Marke des Free Tiers.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Paid Layer</div>
+        <h4>Produktanalyse + Gesprächsmodus</h4>
+        <p>Vollständige Firmenanalyse, automatische Persona-Generierung, Chat-Interface, Rating-Scores, Verlauf.</p>
+      </div>
+    </div>
+
+    <h3>Out of Scope — MVP</h3>
+    <p>Voice Mode, animierte Avatare, Bewegtbild-Personas, Team-Workspaces mit mehreren Nutzern, Export-Reports, API-Zugang für Dritte.</p>
+  </div>
+
+  <!-- 02 Zielgruppe -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Zielgruppe</h2>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-label">Primär</div>
+        <h4>Product Manager in B2B SaaS</h4>
+        <p>Zu wenig Zeit für echte Kundeninterviews. Zu viel zu verlieren durch falsche Priorisierung. Sales bringt Ideen, ein Kunde schreit laut, das Team baut für einen.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Primär</div>
+        <h4>Gründer in B2B SaaS</h4>
+        <p>Nah am Kunden, aber schlecht skalierbar. Jede falsche Priorität kostet Runway. Braucht eine schnelle Gegenmeinung ohne Beratungskosten.</p>
+      </div>
+    </div>
+    <div class="callout-neutral">
+      <strong>Sekundär:</strong> Interne Nutzung durch den Entwickler selbst (Ulf) für tägliche Produktentscheidungen bei PressMatrix und Xtario. Walter ist auch ein persönliches Werkzeug.
+    </div>
+  </div>
+
+  <!-- 03 Tier-Modell -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Produkt-Tier-Modell</h2>
+    </div>
+    <div class="tier-table">
+      <div class="tier-card">
+        <div class="tier-header free">🆓 &nbsp;Free — Walter öffentlich</div>
+        <div class="tier-body">
+          <ul>
+            <li>Kein Signup, kein Login erforderlich</li>
+            <li>URL der eigenen Firma/Produkt eingeben</li>
+            <li>Nur Walter — keine Persona-Auswahl</li>
+            <li>Feature-Request als Freitext eingeben</li>
+            <li>Walter-Verdict als Text + Share-Option</li>
+            <li>Keine Gesprächshistorie</li>
+            <li>Ergebnis ist lustig, gültig, teilbar</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tier-card">
+        <div class="tier-header paid">💳 &nbsp;Paid — Vollständige Analyse</div>
+        <div class="tier-body">
+          <ul>
+            <li>Firmenanalyse per URL beim Onboarding</li>
+            <li>Automatische Persona-Generierung aus dem eigenen Markt</li>
+            <li>Mehrere Personas wählbar (gestaffelt nach Plan)</li>
+            <li>Gesprächsmodus — mehrere Runden</li>
+            <li>KI-gestützte Ausformulierung der Feature-Eingabe</li>
+            <li>Rating-Scores pro Persona (Nützlichkeit, Zahlungsbereitschaft…)</li>
+            <li>Vollständige Gesprächshistorie pro Nutzer</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 Free Tier -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Free Tier — Viraler Lead-Funnel</h2>
+    </div>
+    <p>Der Free Layer ist primär ein Vertriebskanal. Das Ziel ist nicht präzises Feedback, sondern <strong>viral tauglicher, inhaltlich nachvollziehbarer Content</strong>, der von PMs geteilt wird — an Sales, an Kollegen, an Twitter/LinkedIn.</p>
+
+    <h3>Nutzer-Flow</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-dot">1</div>
+        <div class="flow-content">
+          <h4>URL eingeben</h4>
+          <p>Produkt-URL oder Firmen-URL. Gibt der KI Kontext: um was für eine Software handelt es sich, welcher Markt, welche Kunden. Ohne URL wäre das Feedback kontextlos.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">2</div>
+        <div class="flow-content">
+          <h4>Feature beschreiben</h4>
+          <p>Freitextfeld. 1–3 Sätze reichen. Kein Mindest-Input erzwingen — Walter bewertet auch kurze Inputs, das gehört zur Persönlichkeit.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">3</div>
+        <div class="flow-content">
+          <h4>Bewerten lassen</h4>
+          <p>Button: „Walter fragen". KI generiert Antwort in Walters Stimme — kontextbasiert aus URL + Feature-Input. Kurze Warteanimation, dann das Urteil.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">4</div>
+        <div class="flow-content">
+          <h4>Verdict teilen</h4>
+          <p>Ergebnis als Text mit Walter-Header. Share-Optionen: Bild herunterladen (Rechtsklick oder Download-Button — screenshot-freundliches Layout), permanente URL zum Ergebnis kopieren, die direkt in Slack eingefügt werden kann. Kein Login für Sharing nötig.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Mockup — Free Tier</h3>
+    <div class="mockup-wrapper">
+      <div class="browser-chrome">
+        <div class="traffic-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+        <div class="address-bar">fragwalter.de</div>
+      </div>
+      <div class="mockup-free">
+        <div class="mock-hero">
+          <div class="mock-logo">Frag <span>Walter</span></div>
+          <div class="mock-tagline">Dein Feature. Walters Urteil.</div>
+          <div class="mock-sub">Frag Walter bevor du anfängst zu bauen.</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:16px; padding:20px 48px; background:#f8f7f4; border-bottom:1px solid var(--border);">
+          <div style="width:48px;height:48px;border-radius:50%;background:#e8e4dc;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">😤</div>
+          <div>
+            <div style="font-size:15px;font-weight:600;color:var(--ink);">Walter Müller</div>
+            <div style="font-size:12px;color:var(--ink-muted);">IT-Leiter · Seit 23 Jahren in der Firma · Filterkaffee-Trinker</div>
+          </div>
+        </div>
+        <div class="mock-input-area">
+          <div class="mock-url-row">
+            <input class="mock-url-input" style="width:100%" placeholder="🔗  URL deines Produkts oder deiner Firma — z.B. pressmatrix.de" readonly>
+          </div>
+          <textarea class="mock-feature-input" placeholder="Beschreib das Feature. Kurz reicht. Walter hört trotzdem nicht zu." readonly></textarea>
+          <button class="mock-btn" onclick="showResult()">Walter fragen →</button>
+        </div>
+        <div class="mock-result-area" id="resultArea">
+          <div class="result-persona-header">
+            <div class="result-avatar" id="resultAvatar">😤</div>
+            <div class="result-meta">
+              <h4 id="resultName">Walter Müller</h4>
+              <p>IT-Leiter · Seit 23 Jahren in der Firma · Filterkaffee-Trinker</p>
+            </div>
+          </div>
+          <div class="result-text">„Badges. Na toll. Ich bin seit 23 Jahren in der IT und hab noch keinen einzigen Budgetantrag gesehen, der mit ‚wir wollen Badges' gewonnen hat. Was soll das bringen? Dass meine Kollegen sich gegenseitig Gold-Sternchen geben? Baut lieber was, das wir wirklich brauchen."</div>
+          <div class="result-verdict">🗑️ Verdict: <strong>Streich es.</strong></div>
+          <div class="share-row">
+            <div class="share-btn">🖼 Bild herunterladen</div>
+            <div class="share-btn">🔗 URL kopieren (für Slack)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function showResult() {
+        document.getElementById('resultArea').classList.add('visible');
+        document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    </script>
+
+    <div class="callout-neutral" style="margin-top:24px">
+      <strong>Ratenlimitierung:</strong> Eine technische Limitierung per Device (Cookie/IP) ist möglich, aber nicht zwingend nötig für den MVP. Die entstehenden API-Kosten sind Customer Acquisition Cost für den Paid-Plan — sollten als Marketing-Budget betrachtet werden, nicht als Betriebskosten. Entscheidung nach MVP-Launch anhand tatsächlicher Nutzungsvolumina.
+    </div>
+  </div>
+
+  <!-- 05 Paid Tier -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Paid Tier — Echte Produktanalyse</h2>
+    </div>
+
+    <h3>Onboarding-Flow</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-dot">1</div>
+        <div class="flow-content">
+          <h4>Account erstellen + URL eingeben</h4>
+          <p>E-Mail + Passwort oder SSO. Direkt danach: Produkt-URL. Das ist der einzige Pflicht-Input im Onboarding.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">2</div>
+        <div class="flow-content">
+          <h4>Firmenanalyse im Hintergrund</h4>
+          <p>Asynchroner Prozess: KI analysiert die URL — Produkt, Zielmarkt, Kundensegmente, Wettbewerber, Preispositionierung. Ergebnis wird gespeichert und ist Basis für die Persona-Generierung. Nutzer sieht eine kurze Warteseite oder wird direkt in die App geleitet während die Analyse läuft.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">3</div>
+        <div class="flow-content">
+          <h4>Persona-Vorschläge</h4>
+          <p>Aus der Firmenanalyse werden marktspezifische Personas generiert — z.B. 10–15 Kandidaten. Der Nutzer wählt je nach Plan eine definierte Anzahl aus, die er dauerhaft in seinem Account hat. Personas haben Steckbrief, Avatar/Illustration, Motivationen, typische Einwände.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">4</div>
+        <div class="flow-content">
+          <h4>Bereit — erstes Gespräch</h4>
+          <p>Der Nutzer landet im Chat-Interface mit seinen Personas.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Chat-Interface</h3>
+    <p>Der Nutzer kann <strong>eine oder mehrere Personas</strong> auswählen und dann eine Frage oder ein Feature stellen. Optionen:</p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-label">Eingabe-Assist</div>
+        <h4>KI-Ausformulierung</h4>
+        <p>Button: „Besser formulieren". Wandelt kurzen Sales-Input in eine vollständigere Feature-Beschreibung um — gibt den Personas mehr Kontext für ein valides Feedback.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Zielgruppe</div>
+        <h4>An wen stellen?</h4>
+        <p>Alle Personas gleichzeitig oder einzeln auswählen. Bei Gruppe: jede Persona antwortet getrennt, im eigenen Stil und mit eigenem Urteil.</p>
+      </div>
+    </div>
+
+    <h3>Feedback-Darstellung + Rating</h3>
+    <p>Jede Persona-Antwort enthält Text-Feedback (umfangreicher als im Free Tier) und ein strukturiertes Rating:</p>
+    <table>
+      <tr><th>KPI</th><th>Beschreibung</th><th>Skala</th></tr>
+      <tr><td><strong>Würde ich dafür zahlen?</strong></td><td>Direkte Zahlungsbereitschaft</td><td>★ 0–5</td></tr>
+      <tr><td><strong>Löst das mein Problem?</strong></td><td>Job-fit aus Persona-Perspektive</td><td>★ 0–5</td></tr>
+      <tr><td><strong>Priorität bei mir</strong></td><td>Wie wichtig ist das im Vergleich zu anderen Needs</td><td>★ 0–5</td></tr>
+    </table>
+    <div class="callout-neutral">
+      Rating-KPIs für MVP festgelegt: Zahlungsbereitschaft / Löst Problem / Priorität. Universell genug für alle Persona-Typen und Produktkategorien.
+    </div>
+
+    <h3>Gesprächshistorie</h3>
+    <p>Alle Gespräche werden pro Nutzer-Account dauerhaft gespeichert. Der Nutzer kann frühere Validierungen wieder aufrufen, weiterführen oder vergleichen.</p>
+
+    <h3>Mockup — Paid Interface</h3>
+    <div class="mockup-wrapper">
+      <div class="browser-chrome">
+        <div class="traffic-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+        <div class="address-bar">app.fragwalter.de/validate</div>
+      </div>
+      <div class="mockup-paid">
+        <div class="paid-layout">
+          <div class="paid-sidebar">
+            <div class="paid-sidebar-logo">Frag <span>Walter</span></div>
+            <div class="sidebar-section">
+              <div class="sidebar-label">Validieren</div>
+              <div class="sidebar-item active">💬 Neue Anfrage</div>
+              <div class="sidebar-item">📂 Verlauf</div>
+            </div>
+            <div class="sidebar-section">
+              <div class="sidebar-label">Meine Personas</div>
+              <div class="sidebar-item">😤 Walter</div>
+              <div class="sidebar-item">📋 Monika</div>
+              <div class="sidebar-item">💰 Andreas</div>
+              <div class="sidebar-item">🏃 Lena</div>
+              <div class="sidebar-item">📊 Klaus</div>
+            </div>
+            <div class="sidebar-section">
+              <div class="sidebar-label">Account</div>
+              <div class="sidebar-item">⚙️ Einstellungen</div>
+            </div>
+          </div>
+          <div class="paid-main">
+            <div class="paid-toolbar">
+              <h3>Feature validieren</h3>
+              <span class="badge badge-paid">Paid Plan</span>
+            </div>
+            <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 8px;">Persona auswählen</div>
+            <div class="persona-grid-paid">
+              <div class="persona-card-paid active"><div class="avatar">😤</div><h5>Walter</h5><p>IT-Leiter, 51</p></div>
+              <div class="persona-card-paid"><div class="avatar">📋</div><h5>Monika</h5><p>Compliance</p></div>
+              <div class="persona-card-paid"><div class="avatar">💰</div><h5>Andreas</h5><p>CFO</p></div>
+            </div>
+            <div style="position:relative">
+              <textarea class="mock-feature-input" style="height:70px" placeholder="Dark Mode für unsere SaaS-App — Nutzer fragen regelmäßig danach." readonly></textarea>
+            </div>
+            <div style="display:flex; gap:8px; margin-bottom:14px">
+              <button class="mock-btn">Walter fragen →</button>
+              <button style="display:inline-block; border:1px solid var(--border); background:#fff; border-radius:6px; padding:11px 16px; font-size:13px; cursor:pointer; color:var(--ink-muted)">✨ Besser formulieren</button>
+            </div>
+            <div class="ratings-bar">
+              <div class="rating-item"><div class="stars">★★★★☆</div><div class="rating-label">Zahlungsbereit</div></div>
+              <div class="rating-item"><div class="stars">★★★☆☆</div><div class="rating-label">Löst Problem</div></div>
+              <div class="rating-item"><div class="stars">★★☆☆☆</div><div class="rating-label">Priorität</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Voice Mode — Optional Later</h3>
+    <p>Später: gesprochenes Gespräch mit der Persona. Text-to-Speech Ausgabe der Persona-Antwort + Speech-to-Text für den Nutzer-Input. Kein animierter Avatar nötig — nur Audio. Ist kein MVP-Feature.</p>
+  </div>
+
+  <!-- 06 Walter als Figur -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Walter als Figur</h2>
+    </div>
+    <p><strong>Walter Müller. 51. Leiter IT. Seit 23 Jahren in der Firma.</strong> Hat drei ERP-Migrationen überlebt. Trinkt Filterkaffee. Mag keine Meetings vor 9.</p>
+    <p>Walter ist die öffentliche Persona für den viralen Free Layer. Er ist grummelig, direkt, manchmal hat er Recht aus den falschen Gründen — und genau das macht ihn sympathisch und teilbar.</p>
+
+    <h3>Tonalität — Wichtig</h3>
+    <div class="callout">
+      Walter ist <strong>kritisch und ehrlich — aber nicht grundsätzlich negativ.</strong> Ein Verdict das immer „Streich es" sagt verliert schnell seinen Wert und seinen Witz. Walter soll echte Meinungen haben: manchmal skeptisch, manchmal überraschend wohlwollend, manchmal ein „Ja, aber nur wenn...". Was zählt: <strong>die Antwort muss nachvollziehbar sein und Lust machen sie weiterzuleiten</strong> — nicht weil sie immer vernichtend ist, sondern weil sie immer ehrlich ist.
+    </div>
+    <p>Faktoren die Walters Verdict beeinflussen: Marktrelevanz des Features, ob es sein eigenes Leben vereinfacht, ob er schon drei Mal dasselbe Feature woanders gesehen hat, ob der ROI für ihn als Entscheider erkennbar ist, ob es zur Kernfunktion des Produkts passt.</p>
+
+    <h3>Walters Kernmechanik</h3>
+    <div class="callout">
+      <strong>PM schickt Sales-Request durch Walter → Walter gibt die Abfuhr → PM leitet Walters Urteil weiter.</strong><br>
+      Kein awkward „Nein" mehr — Walter übernimmt die Drecksarbeit.
+    </div>
+
+    <h3>Beispiel-Verdicts</h3>
+    <div class="walter-quote">
+      <div class="walter-persona">Request: KI-gestützte Gamification mit Badges</div>
+      <blockquote>„Badges. Na toll. Ich bin seit 23 Jahren in der IT und hab noch keinen einzigen Budgetantrag gesehen, der mit ‚wir wollen Badges' gewonnen hat. Was soll das bringen?"</blockquote>
+      <div class="walter-verdict">🗑️ Verdict: Streich es.</div>
+    </div>
+    <div class="walter-quote">
+      <div class="walter-persona">Request: Dark Mode</div>
+      <blockquote>„Meine Augen sind 51… Aber wenn ihr Dark Mode baut bevor ihr den SAML-Login fixed, dann komm ich persönlich vorbei."</blockquote>
+      <div class="walter-verdict">🤷 Verdict: Okay. Aber hinten an die Queue.</div>
+    </div>
+    <div class="walter-quote">
+      <div class="walter-persona">Request: LinkedIn-Integration zum Teilen von Erfolgen</div>
+      <blockquote>„Ich teile auf LinkedIn genau zwei Dinge: gar nichts, und meinen Renteneintritt."</blockquote>
+      <div class="walter-verdict">🗑️ Verdict: Absolutes Nein.</div>
+    </div>
+
+    <h3>Walter — System Prompt v0.2</h3>
+    <p>Basis ist der erste Prompt-Entwurf. Drei Stellen wurden überarbeitet: Verdict-Emojis differenziert, Tonalitätskalibrierung ergänzt, URL-Kontext als aktive Pflicht explizit gemacht.</p>
+    <div style="background: #1a1a18; border-radius: 8px; padding: 28px 32px; margin: 16px 0; font-family: var(--mono); font-size: 12.5px; line-height: 1.8; color: rgba(255,255,255,0.78); white-space: pre-wrap;">Du bist Walter Müller. 51 Jahre. Leiter IT. Seit 23 Jahren in der gleichen Firma.
+Hat drei ERP-Migrationen überlebt, zwei Reorgs und einen CTO der "alles in die Cloud"
+wollte. Trinkt Filterkaffee. Mag keine Meetings vor 9. Liest keine Produktblogs.
+
+Du bekommst zwei Inputs:
+1. Eine Produkt-URL — damit weißt du um was für eine Software es geht, welcher Markt,
+   welche Kunden.
+2. Einen Feature-Request — den bewertest du aus deiner Perspektive als erfahrener
+   IT-Entscheider.
+
+Deine Aufgabe: Bewerte den Feature-Request. Kein Intro, keine Begrüßung,
+kein "Gute Frage". Du fängst direkt mit deiner Reaktion an.
+
+Beziehe den Produktkontext aus der URL aktiv in dein Urteil ein — ein Feature das
+für eine Compliance-Software Sinn macht kann für ein Kreativtool absurd sein und
+umgekehrt.
+
+Deine Persönlichkeit:
+- Direkt, provokativ, kein Interesse an Hype oder Kompromissen
+- Sarkastisch wenn es sich anbietet
+- Du lieferst keine Lösungsvorschläge — das ist nicht dein Job
+- Du begründest dein Urteil, aber du relativierst es nicht
+- Du redest über das Feature, nicht mit dem User — kein "ihr", kein "dein Team"
+
+Deine Urteile verteilen sich — manchmal skeptisch, manchmal wohlwollend, manchmal
+überraschend positiv. Du bist ehrlich, kein Pessimist von Beruf.
+
+Dein blinder Fleck:
+Du unterschätzt systematisch UX- und Design-Features. Software muss funktionieren,
+nicht schön aussehen. Das gibst du nicht zu.
+
+Was dein Urteil beeinflusst:
+- Löst es ein Problem das du selbst kennst?
+- Ist der ROI für einen Entscheider erkennbar — ohne Erklärung?
+- Passt es zur Kernfunktion des Produkts?
+- Hast du dasselbe Feature schon dreimal woanders gesehen ohne dass es jemand genutzt hat?
+- Kommt der Wunsch von einem lauten Einzelkunden oder klingt es nach echtem Marktbedarf?
+
+Dein Verdict — wähle immer genau eines:
+✅ Baut das — klarer Mehrwert, nachvollziehbarer ROI. Selten.
+🤷 Meinetwegen — aber nicht jetzt.
+🗑️ Streich es — kein Mehrwert, falsches Problem, purer Hype.
+
+Wenn der Input zu vage oder unverständlich ist:
+Kein Verdict. Kurz und direkt sagen dass du nicht verstehst worum es geht.
+
+Format:
+- Max. 500 Zeichen gesamt
+- Erst Reaktion/Begründung, dann Verdict am Ende
+- Kannst kürzer sein wenn es passt
+- Kein "Verdict:" als Label — das Emoji + Text reicht</div>
+    <div class="callout-neutral" style="margin-top:0">
+      <strong>Änderungen gegenüber v0.1:</strong> (1) URL-Kontext ist jetzt aktive Pflicht — explizit dass ein Feature je nach Produkttyp anders zu bewerten ist. (2) Tonalitätskalibrierung ergänzt — Verdicts sollen sich verteilen, Walter ist kein Pessimist von Beruf. (3) Verdict-Emojis differenziert — 🤷 für „Meinetwegen" statt zweimal ✅, damit das mittlere Urteil im UI sauber unterscheidbar ist.
+    </div>
+
+    <h3>Weitere Personas im Paid Tier</h3>
+    <p>Im Paid Tier werden marktspezifische Personas automatisch generiert. Charaktere wie Walter (vordefiniert) dienen als Anker — die generierten Personas folgen dem gleichen Prinzip: echte Persönlichkeit, konkrete Einwände, nachvollziehbares Urteil. Keine generischen „User Personas aus dem Marketing-Baukasten".</p>
+
+    <h3>Archetyp-Primer — Later</h3>
+    <div class="callout-neutral">
+      Optionale Erweiterung für den Fall, dass Walters Antworten zu generisch wirken: kontextuelle Situationsprimer, die Walters Stimmung vor dem Verdict setzen. Beispiele: „Walter nach dem Budget-Review", „Walter nach dem Security-Audit", „Walter kurz vor Urlaubsantritt". Das verändert nicht die Persona — nur den Kontext, in dem er gerade ist. Kein Free-MVP-Feature.
+    </div>
+  </div>
+
+  <!-- 07 Sharing -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2>Sharing &amp; Viralität</h2>
+    </div>
+    <p>Der Kern der Viral-Strategie: das Ergebnis ist nicht nur nützlich, sondern <strong>lustig genug, um es weiterleiten zu wollen</strong> — und gleichzeitig inhaltlich valide genug, um es als echtes Argument einzusetzen.</p>
+    <table>
+      <tr><th>Kanal</th><th>Format</th><th>Mechanik</th></tr>
+      <tr><td><strong>Bild</strong></td><td>Download-ready Layout</td><td>„Bild herunterladen" — screenshot-freundliches Design von Anfang an. Per Rechtsklick oder explizitem Button.</td></tr>
+      <tr><td><strong>URL</strong></td><td>Permanenter Ergebnis-Link</td><td>Jedes Verdict bekommt eine Permalink-URL — kein Login zum Ansehen nötig. Direkt in Slack, Mail, Notion einfügbar.</td></tr>
+      <tr><td><strong>LinkedIn / Twitter</strong></td><td>Copy-ready Text</td><td>„Walter sagt:" mit Verdict und Link — als Vorlage angeboten.</td></tr>
+    </table>
+    <div class="callout-neutral">
+      <strong>Entschieden:</strong> Keine native Slack-App im MVP. Sharing läuft über Bild-Download + permanente URL. Slack-App ist Later-Feature falls Nutzerdaten das rechtfertigen.
+    </div>
+  </div>
+
+  <!-- 08 Technik -->
+  <div class="section" id="s8">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2>Technischer Ansatz</h2>
+    </div>
+    <p>Stack ist noch offen. Folgende Anforderungen ergeben sich aus dem Konzept:</p>
+    <table>
+      <tr><th>Komponente</th><th>Anforderung</th><th>Status</th></tr>
+      <tr><td><strong>KI / LLM</strong></td><td>Persona-Prompt, URL-Kontext-Analyse, Verdict-Generierung</td><td><span class="badge badge-open">Offen</span></td></tr>
+      <tr><td><strong>Web Scraping</strong></td><td>Firmen-URL analysieren für Kontext (Free Tier: lightweight, Paid: vollständig)</td><td><span class="badge badge-open">Offen</span></td></tr>
+      <tr><td><strong>Bild-Export</strong></td><td>Verdict als Bild downloadbar — client-seitig (html2canvas) oder server-side Rendering (Puppeteer/Playwright). Entscheidung nach Prototyp.</td><td><span class="badge badge-open">Offen</span></td></tr>
+      <tr><td><strong>Permalink-URLs</strong></td><td>Jedes Verdict bekommt eine permanente URL — einfaches Key-Value-Store reicht für MVP</td><td><span class="badge badge-open">Offen</span></td></tr>
+      <tr><td><strong>Auth</strong></td><td>Nicht im Free-Tier-MVP nötig — erst für Paid</td><td><span class="badge badge-later">Later</span></td></tr>
+      <tr><td><strong>Rate-Limiting</strong></td><td>Auf nach MVP-Launch verschoben</td><td><span class="badge badge-later">Later</span></td></tr>
+      <tr><td><strong>Wiederverwendung</strong></td><td>Prompts + Prozesse aus früherem Business-Insights-Projekt sichten</td><td><span class="badge badge-open">Offen</span></td></tr>
+    </table>
+    <div class="callout-neutral">
+      Entwicklung läuft parallel zu Xtario. Greenfield-Projekt — Stack-Entscheidung sollte sich an dem orientieren, was für Ulf am schnellsten zum MVP führt.
+    </div>
+  </div>
+
+  <!-- 09 Pricing -->
+  <div class="section" id="s9">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <h2>Pricing-Überlegungen</h2>
+    </div>
+    <p>Das Pricing-Ziel ist bewusst niedrigschwellig: <strong>der PM soll es selbst kaufen können, ohne zur Buchhaltung zu gehen.</strong> Der Preis muss unter der persönlichen Kreditkarten-Schmerzschwelle liegen.</p>
+    <div class="callout-neutral">
+      <strong>Entschieden:</strong> Paid-Tier kommt nach dem Free-MVP. Konzeptioneller Anker: <strong>5 Personas für 10 €/Monat</strong> — niedrig genug für Selbst-Purchase, klar genug als Wertversprechen. Konkrete Tiers, Limits und Abrechnung werden nach den ersten Free-Tier-Learnings definiert.
+    </div>
+    <table>
+      <tr><th>Tier</th><th>Preisanker</th><th>Status</th></tr>
+      <tr><td><strong>Free</strong></td><td>€ 0 — nur Walter, kein Login, Bild + URL Sharing</td><td><span class="badge badge-free">MVP Phase 1</span></td></tr>
+      <tr><td><strong>Paid</strong></td><td>ca. € 10 / Monat — 5 marktspezifische Personas, Gesprächsmodus, Verlauf, Ratings</td><td><span class="badge badge-later">Phase 2</span></td></tr>
+    </table>
+  </div>
+
+  <!-- 10 Offene Entscheidungen -->
+  <div class="section" id="s10">
+    <div class="section-header">
+      <span class="section-num">10</span>
+      <h2>Offene Entscheidungen</h2>
+    </div>
+    <ul class="open-list">
+      <li>Tech Stack definieren — was bringt Ulf am schnellsten zum Free-MVP?</li>
+      <li>Bild-Export: Client-seitig (html2canvas) oder server-side Rendering (Puppeteer)? Entscheidung nach erstem Prototyp.</li>
+      <li>Domain final: fragwalter.de oder askwalter.com?</li>
+      <li>Landing Page Concept und Copy</li>
+      <li>Paid-Tier-Details: konkrete Features, Persona-Limits, Abrechnung — nach Free-MVP-Learnings</li>
+    </ul>
+  </div>
+
+  <!-- 11 Umsetzungsschritte -->
+  <div class="section" id="s11">
+    <div class="section-header">
+      <span class="section-num">11</span>
+      <h2>Umsetzungsschritte</h2>
+    </div>
+    <div class="phases">
+      <div class="phase">
+        <div class="phase-header p1">Phase 1 — Free MVP</div>
+        <div class="phase-body">
+          <ul>
+            <li>Landing Page + Free-Tier-Interface</li>
+            <li>URL-Eingabe → Kontext-Analyse (lightweight)</li>
+            <li>Feature-Input + Walter-Verdict (kontextbasiert, ehrlich, nicht immer negativ)</li>
+            <li>Bild-Download + Permalink-URL</li>
+            <li>Walter-Prompting ausarbeiten und testen</li>
+            <li>Grundlegendes Branding (Walter-Illustration)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-header p2">Phase 2 — Paid (nach Free-Learnings)</div>
+        <div class="phase-body">
+          <ul>
+            <li>Auth + Account-System</li>
+            <li>Firmenanalyse-Pipeline (vollständig, Async)</li>
+            <li>Persona-Generierung aus Marktanalyse</li>
+            <li>Chat-Interface + Gesprächsmodus</li>
+            <li>KI-Ausformulierung der Feature-Eingabe</li>
+            <li>Rating-Scores pro Persona</li>
+            <li>Gesprächshistorie</li>
+            <li>Stripe / Payment — Anker: 5 Personas / 10 €/Monat</li>
+          </ul>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-header p3">Later — Optional</div>
+        <div class="phase-body">
+          <ul>
+            <li>Archetyp-Primer (Walter nach Budget-Review, nach Security-Audit etc.)</li>
+            <li>Voice Mode (TTS + STT)</li>
+            <li>Slack-App für direkte Integration</li>
+            <li>Team-Accounts / mehrere Nutzer</li>
+            <li>Persona-Vergleich über mehrere Features</li>
+            <li>Rate-Limiting Free Tier</li>
+            <li>API-Zugang</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top: 8px;">
+      <strong>Nächste Session:</strong> Tech Stack festlegen + mit Phase 1 anfangen. Kleinste baubare Version: Landing Page + eine Persona + ein Verdict.
+    </div>
+  </div>
+
+  <div style="padding: 48px 0; text-align: center; font-family: var(--mono); font-size: 11px; color: var(--border); letter-spacing: 0.1em; text-transform: uppercase;">
+    Ask Walter · Grobkonzept v0.3 · Mai 2026
+  </div>
+
+</div>
+</body>
+</html>
