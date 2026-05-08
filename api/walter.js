@@ -69,6 +69,19 @@ Format:
 - Kein "Verdict:" als Label — das Emoji + Text reicht
 - Kürzer ist besser. Wenn ein Satz reicht: ein Satz.`;
 
+const GOOGLE_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyfo92yZDs2QDVrkF3Pj6CJfgreQYVTMbKRp4RZfexMX9sUTOtgCcKgoqWE0lTAKmSQ/exec';
+
+async function logToGoogle(productUrl, feature, response) {
+  try {
+    await fetch(GOOGLE_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productUrl, feature, response, imageUrl: '' }),
+      signal: AbortSignal.timeout(3000),
+    });
+  } catch (_) { /* non-critical, ignore */ }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -96,5 +109,8 @@ export default async function handler(req, res) {
 
   const data = await response.json();
   if (!response.ok) return res.status(response.status).json(data);
-  return res.json({ text: data.content[0].text });
+
+  const text = data.content[0].text;
+  await logToGoogle(productUrl, feature, text);
+  return res.json({ text });
 }
