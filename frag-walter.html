@@ -56,6 +56,7 @@
   }
   .topbar-brand { font-weight: 600; color: var(--ink); }
   .topbar-tier  { color: rgba(26,22,18,0.38); }
+  .topbar-mobile { display: none; }
   .topbar-right {
     display: flex;
     gap: 24px;
@@ -502,13 +503,100 @@
   }
 
   .page-bottom { padding-bottom: 24px; }
+
+  /* ── MOBILE (≤ 767px) ── */
+  @media (max-width: 767px) {
+
+    /* Topbar */
+    .topbar {
+      padding: 12px 20px;
+      overflow: hidden;
+    }
+    .topbar-desktop { display: none; }
+    .topbar-mobile  {
+      display: inline;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .topbar-mobile em { font-style: normal; color: var(--accent); }
+
+    /* Hero — Portrait oben, Text darunter */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      min-height: auto;
+      max-width: 100%;
+    }
+    .hero-right {
+      order: -1;
+      padding: 0;
+      width: 100%;
+    }
+    .hero-portrait-wrap {
+      aspect-ratio: 1 / 0.95;
+      min-height: auto;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .hero-left {
+      padding: 32px 20px 8px;
+    }
+    .hero-eyebrow { margin-bottom: 16px; }
+    .hero h1      { font-size: 46px; }
+    .hero-sub     { max-width: 100%; font-size: 16px; }
+    .hero-steps {
+      gap: 0;
+      padding: 20px 0 0;
+      justify-content: space-between;
+    }
+
+    /* Separator */
+    .sep-wrap { padding: 0 20px; margin-bottom: 28px; }
+
+    /* Form */
+    .form-wrap { padding: 0 20px 40px; }
+    #feature   { font-size: 16px; } /* iOS zoom prevention */
+    .btn {
+      width: 100%;
+      min-height: 52px;
+      font-size: 16px;
+    }
+    .hint          { display: none; }
+    .form-trust    { margin-top: 28px; }
+
+    /* Verdict / Response-State */
+    .rs-header        { padding: 20px 20px 0; }
+    .rs-watermark     { top: 18px; right: 18px; }
+    .rs-quote         { font-size: 17px; padding: 20px 20px 16px; }
+    .rs-verdict-zone  { padding: 0 20px; }
+    .rs-verdict       { font-size: 28px; }
+    .rs-echo          { margin: 0 20px 20px; }
+    .rs-share-outer   { padding: 14px 20px 0; }
+    .rs-btn-light {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      margin-right: 0;
+      margin-bottom: 8px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 16px 20px;
+      font-size: 9px;
+    }
+  }
 </style>
 </head>
 <body>
 
 <!-- Top bar -->
 <nav class="topbar">
-  <span class="topbar-cta">Paid Version mit deinen eigenen 5 Personas → coming soon</span>
+  <span class="topbar-cta topbar-desktop">Paid Version mit deinen eigenen 5 Personas → coming soon</span>
+  <span class="topbar-cta topbar-mobile">Walter ist gut. Deine eigenen Personas sind besser. <em>→ Coming Soon</em></span>
 </nav>
 
 <!-- Hero -->
